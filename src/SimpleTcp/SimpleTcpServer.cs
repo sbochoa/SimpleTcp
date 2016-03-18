@@ -74,11 +74,9 @@ namespace SimpleTcp
 
                     _tasks.Add(BeginReceivingFromAsync(client));
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException) when(_stopping)
                 {
-                    if (_stopping)
-                        return;
-                    throw;
+                    return;
                 }
             }
         }
@@ -97,11 +95,9 @@ namespace SimpleTcp
                     {
                         await BeginReceivingFromCoreAsync(stream, buffer, memoryStream);
                     }
-                    catch (ObjectDisposedException)
+                    catch (ObjectDisposedException) when(_stopping)
                     {
-                        if (_stopping)
-                            return;
-                        throw;
+                        return;
                     }
                     
                 }
